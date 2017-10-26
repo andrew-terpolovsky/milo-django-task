@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load staticfiles manage_user %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users list</title>
+    <script type='text/javascript' src="{% static 'js/libs/jquery.min.js' %}"></script>
+    <script type='text/javascript' src="{% static 'js/libs/bootstrap.min.js' %}"></script>
+    <script type='text/javascript' src="{% static 'js/libs/angular.min.js' %}"></script>
+    <script type='text/javascript' src="{% static 'js/libs/angular-resource.min.js' %}"></script>
+    <script type='text/javascript' src="{% static 'js/app/index.js' %}"></script>
+    <link type='text/css' href="{% static 'css/libs/bootstrap.min.css' %}" rel='stylesheet'>
+    <link type='text/css' href="{% static 'css/app/index.css' %}" rel='stylesheet'>
+</head>
+<body ng-app="milo">
+<div class="container" ng-controller="ManageUserCtrl">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Django test task</h1>
+        </div>
+        <div class="col-sm-6 text-right">
+            <a class="btn btn-info" target="_blank" href="{% url 'users:export-csv' %}">Export in CSV</a>
+            <button class="btn btn-success" ng-click="manageUser()">Add user</button>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>
+                Username
+            </th>
+            <th>
+                Birthday
+            </th>
+            <th>
+                Eligible
+            </th>
+            <th>
+                Random Number
+            </th>
+            <th>
+                BizzFuzz
+            </th>
+            <td>
+
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.birthday }}</td>
+                <td>{% allowed user.birthday %}</td>
+                <td>{{ user.rand_num }}</td>
+                <td>{% bizz_fuzz user.rand_num %}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="userDialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" ng-if="model.id">Manage User</h4>
+            <h4 class="modal-title" ng-if="!model.id">Create User</h4>
+          </div>
+          <div class="modal-body">
+              <form class="form-horizontal" ng-submit="save()">
+                  <div class="form-group" ng-class="{'has-error': model.errors.username}">
+                      <label for="" class="control-label col-sm-4 col-md-3">Username</label>
+                      <div class="col-sm-8">
+                          <input type="text" ng-model="model.username" class="form-control">
+                      </div>
+                  </div>
+                  <div class="form-group" ng-class="{'has-error': model.errors.birthday}">
+                      <label for="" class="control-label col-sm-4 col-md-3">Birthday</label>
+                      <div class="col-sm-8">
+                          <input type="date" ng-model="model.birthday" class="form-control">
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</body>
+</html>

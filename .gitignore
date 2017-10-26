@@ -1,0 +1,9 @@
+# Python:
+*.py[cod]
+
+# Virtual enviropment:
+venv/
+
+
+# Database:
+db.sqlite3
